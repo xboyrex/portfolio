@@ -1,0 +1,3585 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#090909">
+    <meta name="description" content="Mayank Droid — Android customization, Linux, AI, web and visual design portfolio.">
+    <title>Mayank Droid / Onyx — Systems • Frames • Code</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        /* ── reset & base ── */
+        :root {
+            --bg: #090909;
+            --paper: #f3f1ec;
+            --ink: #101010;
+            --muted: #85827c;
+            --line: #292929;
+            --accent: #c91d27;
+            --accent-glow: rgba(201, 29, 39, .35);
+            --ease: cubic-bezier(.16, 1, .3, 1);
+            --ease-out: cubic-bezier(0, 0, .2, 1);
+            --shadow: 0 20px 60px rgba(0, 0, 0, .6);
+            --radius: 20px;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: var(--bg);
+            color: #f5f3ee;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        ::selection {
+            background: #fff;
+            color: #111;
+        }
+        img,
+        svg {
+            display: block;
+        }
+
+        /* ── scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* ── loader ── */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, #c91d27);
+            z-index: 999;
+            transition: width .15s ease;
+        }
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: #090909;
+            z-index: 1000;
+            display: grid;
+            place-items: center;
+            transition: .8s var(--ease);
+        }
+        .loader.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-in {
+            width: min(380px, 75vw);
+        }
+        .loader-top,
+        .loader-bottom {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            letter-spacing: .17em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        .loader-top b {
+            font-family: "Space Grotesk";
+            color: #fff;
+        }
+        .loader-line {
+            height: 1px;
+            background: #252525;
+            margin: 14px 0;
+            overflow: hidden;
+            border-radius: 99px;
+        }
+        .loader-line i {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #fff, #c91d27);
+            animation: load 1.6s var(--ease) forwards;
+        }
+        @keyframes load {
+            to {
+                width: 100%;
+            }
+        }
+
+        /* ── nav ── */
+        .nav {
+            height: 76px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 90;
+            padding: 0 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid transparent;
+            transition: .4s var(--ease);
+        }
+        .nav.scrolled {
+            background: rgba(9, 9, 9, .82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-color: #222;
+        }
+        .brand {
+            font: 700 14px "Space Grotesk";
+            letter-spacing: .08em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity .3s;
+        }
+        .brand:hover {
+            opacity: .8;
+        }
+        .brand-icon {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            transition: transform .5s var(--ease);
+        }
+        .brand:hover .brand-icon {
+            transform: rotate(-8deg) scale(1.05);
+        }
+        .links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            font-size: 10px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: #999;
+        }
+        .links a {
+            position: relative;
+            transition: color .3s;
+            padding: 4px 0;
+        }
+        .links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #fff;
+            transition: width .4s var(--ease);
+        }
+        .links a:hover {
+            color: #fff;
+        }
+        .links a:hover::after {
+            width: 100%;
+        }
+        .pill {
+            border: 1px solid #444;
+            padding: 10px 18px;
+            border-radius: 99px;
+            color: #fff;
+            transition: all .3s var(--ease);
+        }
+        .pill:hover {
+            background: #fff;
+            color: #111;
+            border-color: #fff;
+        }
+        .pill::after {
+            display: none;
+        }
+        .menu-btn {
+            display: none;
+            background: none;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            padding: 4px;
+            transition: transform .3s var(--ease);
+        }
+        .menu-btn:hover {
+            transform: scale(1.1);
+        }
+        .menu-btn svg {
+            display: block;
+        }
+
+        /* ── mobile nav overlay ── */
+        .nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 79;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .5s var(--ease), visibility .5s;
+        }
+        .nav-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        #mobileNav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(340px, 80vw);
+            background: #0d0d0d;
+            z-index: 80;
+            padding: 80px 32px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transform: translateX(100%);
+            transition: transform .55s var(--ease-out);
+            border-left: 1px solid #222;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, .7);
+        }
+        #mobileNav.open {
+            transform: translateX(0);
+        }
+        #mobileNav .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 0;
+            color: #888;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform .3s var(--ease), color .3s;
+            font-size: 20px;
+        }
+        #mobileNav .close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        #mobileNav a {
+            font: 600 22px "Space Grotesk";
+            color: #aaa;
+            padding: 14px 0;
+            border-bottom: 1px solid #1a1a1a;
+            transition: all .3s var(--ease);
+            letter-spacing: -.02em;
+        }
+        #mobileNav a:hover {
+            color: #fff;
+            padding-left: 12px;
+            border-color: #333;
+        }
+        #mobileNav .mobile-pill {
+            margin-top: 20px;
+            border: 1px solid #444;
+            border-radius: 99px;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            transition: all .3s var(--ease);
+        }
+        #mobileNav .mobile-pill:hover {
+            background: #fff;
+            color: #111;
+        }
+
+        /* ── hero ── */
+        .hero {
+            min-height: 100svh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 7vw 10vh;
+            overflow: hidden;
+            background: radial-gradient(circle at 78% 28%, rgba(201, 29, 39, .2), transparent 27%), linear-gradient(135deg, #080808, #101010 55%, #070707);
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+            background-size: 82px 82px;
+            mask-image: linear-gradient(to right, #000, transparent 70%);
+            -webkit-mask-image: linear-gradient(to right, #000, transparent 70%);
+        }
+        .orb {
+            position: absolute;
+            width: 45vw;
+            height: 45vw;
+            right: -12vw;
+            top: 8vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 29, 39, .25), transparent 67%);
+            filter: blur(8px);
+            animation: float 12s ease-in-out infinite alternate;
+        }
+        .orb2 {
+            position: absolute;
+            width: 25vw;
+            height: 25vw;
+            left: -8vw;
+            bottom: 10vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 29, 39, .08), transparent 60%);
+            filter: blur(12px);
+            animation: float2 14s ease-in-out infinite alternate;
+        }
+        @keyframes float {
+            to {
+                transform: translate(-4vw, 3vh) scale(1.08);
+            }
+        }
+        @keyframes float2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(6vw, -4vh) scale(1.2);
+            }
+        }
+        .hero-in {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+        }
+        .eyebrow {
+            font-size: 9px;
+            letter-spacing: .21em;
+            text-transform: uppercase;
+            color: #777;
+        }
+        .kicker {
+            display: flex;
+            gap: 11px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .kicker::before {
+            content: "";
+            width: 42px;
+            height: 1px;
+            background: #666;
+            transition: width .6s var(--ease);
+        }
+        .hero:hover .kicker::before {
+            width: 62px;
+        }
+        .hero h1 {
+            font: 600 clamp(65px, 11vw, 165px)/.8 "Space Grotesk";
+            letter-spacing: - .085em;
+        }
+        .hero h1 em {
+            font: 400 italic clamp(65px, 11vw, 165px)/.8 "DM Serif Display";
+            color: #aaa;
+        }
+        .hero-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 35px;
+            margin-top: 32px;
+        }
+        .hero-copy {
+            max-width: 560px;
+            color: #95918a;
+            font-size: 13px;
+            line-height: 1.85;
+        }
+        .actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 600;
+            transition: all .4s var(--ease);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 99px;
+            opacity: 0;
+            transition: opacity .4s var(--ease);
+        }
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn:active {
+            transform: scale(.97);
+        }
+        .btn .arrow-icon {
+            transition: transform .4s var(--ease);
+        }
+        .btn:hover .arrow-icon {
+            transform: rotate(-45deg) translateX(2px);
+        }
+        .light {
+            background: #f4f2ed;
+            color: #111;
+        }
+        .light::before {
+            background: #fff;
+        }
+        .light:hover {
+            box-shadow: 0 8px 32px rgba(255, 255, 255, .15);
+        }
+        .outline {
+            border: 1px solid #444;
+            color: #ccc;
+        }
+        .outline::before {
+            background: rgba(255, 255, 255, .05);
+        }
+        .outline:hover {
+            border-color: #fff;
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, .05);
+        }
+        .hero-meta {
+            position: absolute;
+            right: 7vw;
+            bottom: 10vh;
+            text-align: right;
+            color: #666;
+            font-size: 8px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+        }
+        .hero-meta b {
+            display: block;
+            color: #ddd;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+        .scroll-indicator {
+            position: absolute;
+            left: 7vw;
+            bottom: 25px;
+            color: #555;
+            font-size: 8px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .scroll-indicator svg {
+            animation: bob 2.4s var(--ease) infinite;
+        }
+        @keyframes bob {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(5px);
+            }
+        }
+
+        /* ── hero tech badges ── */
+        .hero-tech-badges {
+            position: absolute;
+            right: 7vw;
+            top: 14vh;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .hero-tech-badges .badge {
+            background: rgba(255, 255, 255, .04);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .06);
+            border-radius: 99px;
+            padding: 6px 12px 6px 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 7px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #888;
+            transition: all .4s var(--ease);
+            pointer-events: auto;
+            cursor: default;
+            animation: fadeBadge 1s var(--ease) forwards;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        .hero-tech-badges .badge:nth-child(1) {
+            animation-delay: .5s;
+        }
+        .hero-tech-badges .badge:nth-child(2) {
+            animation-delay: .65s;
+        }
+        .hero-tech-badges .badge:nth-child(3) {
+            animation-delay: .8s;
+        }
+        .hero-tech-badges .badge:nth-child(4) {
+            animation-delay: .95s;
+        }
+        .hero-tech-badges .badge:nth-child(5) {
+            animation-delay: 1.1s;
+        }
+        .hero-tech-badges .badge:nth-child(6) {
+            animation-delay: 1.25s;
+        }
+        .hero-tech-badges .badge:nth-child(7) {
+            animation-delay: 1.4s;
+        }
+        .hero-tech-badges .badge:nth-child(8) {
+            animation-delay: 1.55s;
+        }
+        .hero-tech-badges .badge:nth-child(9) {
+            animation-delay: 1.7s;
+        }
+        .hero-tech-badges .badge:nth-child(10) {
+            animation-delay: 1.85s;
+        }
+        .hero-tech-badges .badge:nth-child(11) {
+            animation-delay: 2.0s;
+        }
+        .hero-tech-badges .badge:nth-child(12) {
+            animation-delay: 2.15s;
+        }
+        @keyframes fadeBadge {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .hero-tech-badges .badge:hover {
+            background: rgba(255, 255, 255, .08);
+            border-color: rgba(255, 255, 255, .15);
+            color: #fff;
+            transform: translateX(-4px);
+        }
+        .hero-tech-badges .badge svg {
+            flex-shrink: 0;
+        }
+
+        /* ── ticker ── */
+        .ticker {
+            height: 58px;
+            background: var(--paper);
+            color: #111;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            border-top: 1px solid rgba(0, 0, 0, .04);
+            border-bottom: 1px solid rgba(0, 0, 0, .04);
+        }
+        .ticker-track {
+            display: flex;
+            gap: 28px;
+            min-width: max-content;
+            animation: marquee 28s linear infinite;
+            align-items: center;
+        }
+        .ticker span {
+            font: 600 10px "Space Grotesk";
+            letter-spacing: .17em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ticker .tick-icon {
+            flex-shrink: 0;
+            animation: pulse-star 2s ease-in-out infinite;
+        }
+        @keyframes pulse-star {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+        @keyframes marquee {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ── sections ── */
+        .section {
+            padding: clamp(90px, 12vw, 165px) 7vw;
+        }
+        .paper {
+            background: var(--paper);
+            color: var(--ink);
+        }
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .title {
+            font: 600 clamp(48px, 7vw, 100px)/.86 "Space Grotesk";
+            letter-spacing: - .075em;
+            margin-top: 12px;
+        }
+        .title em {
+            font: 400 italic "DM Serif Display";
+            color: #9b8472;
+        }
+        .note {
+            max-width: 390px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.85;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 9vw;
+            align-items: end;
+        }
+        .lead {
+            font: 500 clamp(36px, 5vw, 72px)/1.02 "Space Grotesk";
+            letter-spacing: - .06em;
+        }
+        .lead span {
+            color: #999;
+        }
+        .side {
+            border-left: 1px solid #cbc6bd;
+            padding-left: 25px;
+            color: #6e6a64;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+        .side strong {
+            display: block;
+            color: #111;
+            margin-bottom: 8px;
+        }
+
+        /* ── about interests ── */
+        .interest-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+        .interest-icons .int {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(0, 0, 0, .08);
+            border-radius: 99px;
+            padding: 5px 12px 5px 8px;
+            font-size: 7px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #6e6a64;
+            background: rgba(255, 255, 255, .4);
+            transition: all .3s var(--ease);
+            cursor: default;
+        }
+        .interest-icons .int:hover {
+            background: rgba(255, 255, 255, .8);
+            border-color: rgba(0, 0, 0, .15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
+        }
+        .interest-icons .int svg {
+            flex-shrink: 0;
+        }
+
+        /* ── capabilities ── */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border-top: 1px solid var(--line);
+        }
+        .cap {
+            padding: 30px 20px 35px 0;
+            border-bottom: 1px solid var(--line);
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            gap: 20px;
+            transition: background .4s var(--ease), transform .4s var(--ease);
+            cursor: default;
+            border-radius: 4px;
+        }
+        .cap:hover {
+            background: rgba(255, 255, 255, .02);
+            transform: translateX(4px);
+        }
+        .cap:nth-child(odd) {
+            border-right: 1px solid var(--line);
+            padding-right: 35px;
+        }
+        .cap:nth-child(even) {
+            padding-left: 35px;
+        }
+        .cap-no {
+            font-size: 9px;
+            color: #666;
+            letter-spacing: .15em;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .cap-no svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: stroke .3s;
+        }
+        .cap:hover .cap-no svg {
+            stroke: #fff;
+        }
+        .cap h3 {
+            font: 500 23px "Space Grotesk";
+            letter-spacing: - .035em;
+        }
+        .cap p {
+            color: #777;
+            font-size: 11px;
+            line-height: 1.7;
+            margin-top: 9px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 16px;
+        }
+        .tag {
+            border: 1px solid #303030;
+            border-radius: 99px;
+            padding: 6px 9px;
+            color: #888;
+            font-size: 8px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            transition: all .3s var(--ease);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tag:hover {
+            border-color: #666;
+            color: #fff;
+            background: rgba(255, 255, 255, .04);
+        }
+        .tag svg {
+            flex-shrink: 0;
+        }
+
+        /* ── interface ── */
+        .interface {
+            background: #101010;
+            padding: clamp(90px, 11vw, 150px) 7vw;
+        }
+        .interface-grid {
+            display: grid;
+            grid-template-columns: .72fr 1.28fr;
+            gap: 7vw;
+            align-items: center;
+        }
+        .interface-copy h2 {
+            font: 600 clamp(48px, 6vw, 88px)/.86 "Space Grotesk";
+            letter-spacing: - .07em;
+            margin-top: 18px;
+        }
+        .interface-copy h2 em {
+            font: 400 italic "DM Serif Display";
+            color: #888;
+        }
+        .interface-copy p {
+            max-width: 430px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.9;
+            margin-top: 25px;
+        }
+        .ui {
+            border: 1px solid #292929;
+            border-radius: 18px;
+            background: #0b0b0b;
+            padding: 12px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+            transition: all .7s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+        .ui::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 18px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, .04), transparent 50%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .ui:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, .7);
+        }
+        .ui-top {
+            height: 34px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dots {
+            display: flex;
+            gap: 5px;
+        }
+        .dots i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #333;
+            transition: background .3s;
+        }
+        .ui:hover .dots i:nth-child(1) {
+            background: #ff5f56;
+        }
+        .ui:hover .dots i:nth-child(2) {
+            background: #ffbd2e;
+        }
+        .ui:hover .dots i:nth-child(3) {
+            background: #27c93f;
+        }
+        .ui-top b {
+            font: 700 9px "Space Grotesk";
+            letter-spacing: .1em;
+        }
+        .ui-body {
+            display: grid;
+            grid-template-columns: 145px 1fr;
+            min-height: 410px;
+        }
+        .ui-side {
+            border-right: 1px solid #222;
+            padding: 20px 12px;
+        }
+        .ui-side small,
+        .ui-main small {
+            font-size: 7px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        .ui-nav {
+            display: grid;
+            gap: 7px;
+            margin-top: 23px;
+        }
+        .ui-nav span {
+            padding: 9px;
+            border-radius: 7px;
+            color: #777;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all .3s var(--ease);
+            cursor: default;
+        }
+        .ui-nav span svg {
+            opacity: .5;
+            transition: opacity .3s;
+        }
+        .ui-nav span:hover {
+            background: #181818;
+            color: #ccc;
+        }
+        .ui-nav span:hover svg {
+            opacity: .8;
+        }
+        .ui-nav .active {
+            background: #181818;
+            color: #fff;
+        }
+        .ui-nav .active svg {
+            opacity: 1;
+        }
+        .ui-main {
+            padding: 22px;
+        }
+        .ui-main h3 {
+            font: 600 29px "Space Grotesk";
+            letter-spacing: - .06em;
+            margin: 8px 0 22px;
+        }
+        .ui-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 9px;
+        }
+        .ui-card {
+            border: 1px solid #242424;
+            border-radius: 10px;
+            padding: 12px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            transition: all .4s var(--ease);
+        }
+        .ui-card:hover {
+            border-color: #444;
+            background: rgba(255, 255, 255, .02);
+            transform: translateY(-2px);
+        }
+        .ui-card span {
+            font-size: 7px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+        .ui-card b {
+            display: block;
+            font: 600 18px "Space Grotesk";
+            margin-top: 13px;
+            transition: color .3s;
+        }
+        .ui-card:hover b {
+            color: #fff;
+        }
+        .chart {
+            height: 140px;
+            border: 1px solid #242424;
+            border-radius: 10px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(#191919 1px, transparent 1px);
+            background-size: 100% 35px;
+        }
+        .chart svg {
+            position: absolute;
+            inset: 15px;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+        }
+        .chart svg path {
+            stroke-dasharray: 800;
+            stroke-dashoffset: 800;
+            animation: drawChart 2s var(--ease) forwards;
+        }
+        @keyframes drawChart {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* ── projects ── */
+        .projects {
+            background: #0b0b0b;
+            padding: clamp(90px, 12vw, 160px) 5vw;
+        }
+        .project-list {
+            border-top: 1px solid var(--line);
+        }
+        .project {
+            display: grid;
+            grid-template-columns: 65px 1.2fr 1fr 40px;
+            align-items: center;
+            gap: 25px;
+            padding: 30px 10px;
+            border-bottom: 1px solid var(--line);
+            transition: all .45s var(--ease);
+            cursor: default;
+            border-radius: 4px;
+        }
+        .project:hover {
+            padding-left: 26px;
+            background: rgba(255, 255, 255, .03);
+            transform: translateX(4px);
+        }
+        .project-no {
+            font-size: 9px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .project h3 {
+            font: 500 clamp(21px, 3vw, 40px) "Space Grotesk";
+            letter-spacing: - .045em;
+            transition: color .3s;
+        }
+        .project:hover h3 {
+            color: #fff;
+        }
+        .project p {
+            font-size: 11px;
+            line-height: 1.65;
+            color: #777;
+        }
+        .arrow-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            transition: all .4s var(--ease);
+            flex-shrink: 0;
+            cursor: pointer;
+            background: transparent;
+            color: inherit;
+        }
+        .arrow-btn svg {
+            transition: stroke .4s;
+        }
+        .project:hover .arrow-btn {
+            background: #fff;
+            transform: rotate(-45deg) scale(1.05);
+            border-color: #fff;
+        }
+        .project:hover .arrow-btn svg {
+            stroke: #111;
+        }
+        .project-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .04);
+            display: grid;
+            place-items: center;
+            transition: all .4s var(--ease);
+        }
+        .project:hover .project-icon {
+            background: rgba(255, 255, 255, .08);
+        }
+        .project-icon svg {
+            transition: transform .4s var(--ease);
+        }
+        .project:hover .project-icon svg {
+            transform: scale(1.1);
+        }
+        .project-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .project-stack .mini-tag {
+            border: 1px solid #333;
+            border-radius: 99px;
+            padding: 2px 8px;
+            font-size: 6px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #666;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all .3s var(--ease);
+        }
+        .project:hover .mini-tag {
+            border-color: #555;
+            color: #999;
+        }
+        .project-stack .mini-tag svg {
+            flex-shrink: 0;
+        }
+
+        /* ── services ── */
+        .services {
+            background: var(--paper);
+            color: #111;
+            padding: clamp(90px, 11vw, 150px) 7vw;
+        }
+        .service-list {
+            border-top: 1px solid #c8c4bc;
+        }
+        .service {
+            display: grid;
+            grid-template-columns: 55px 1fr 1fr 38px;
+            gap: 25px;
+            align-items: center;
+            padding: 25px 5px;
+            border-bottom: 1px solid #c8c4bc;
+            transition: all .4s var(--ease);
+            cursor: default;
+            border-radius: 4px;
+        }
+        .service:hover {
+            padding-left: 20px;
+            background: rgba(255, 255, 255, .5);
+            transform: translateX(4px);
+        }
+        .service-no {
+            font-size: 9px;
+            color: #967b68;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .service h3 {
+            font: 500 22px "Space Grotesk";
+        }
+        .service p {
+            font-size: 11px;
+            line-height: 1.7;
+            color: #777;
+        }
+        .service .arrow-btn {
+            border-color: #bcb7af;
+            cursor: pointer;
+            background: transparent;
+            color: inherit;
+        }
+        .service:hover .arrow-btn {
+            background: #111;
+            border-color: #111;
+            transform: rotate(-45deg) scale(1.05);
+        }
+        .service:hover .arrow-btn svg {
+            stroke: #fff;
+        }
+        .service-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, .04);
+            display: grid;
+            place-items: center;
+            transition: all .4s var(--ease);
+        }
+        .service:hover .service-icon {
+            background: rgba(0, 0, 0, .08);
+        }
+        .service-icon svg {
+            transition: transform .4s var(--ease);
+        }
+        .service:hover .service-icon svg {
+            transform: scale(1.1);
+        }
+
+        /* ── stack ── */
+        .stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .stack-card {
+            border: 1px solid var(--line);
+            padding: 28px;
+            min-height: 210px;
+            background: #0d0d0d;
+            transition: all .5s var(--ease);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stack-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, .02), transparent 60%);
+            opacity: 0;
+            transition: opacity .5s;
+        }
+        .stack-card:hover {
+            background: #141414;
+            transform: translateY(-6px);
+            border-color: #444;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+        }
+        .stack-card:hover::before {
+            opacity: 1;
+        }
+        .stack-card small {
+            font-size: 8px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        .stack-card h3 {
+            font: 500 27px "Space Grotesk";
+            margin: 45px 0 10px;
+            letter-spacing: - .04em;
+        }
+        .stack-card p {
+            font-size: 11px;
+            line-height: 1.7;
+            color: #777;
+        }
+        .stack-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .04);
+            display: grid;
+            place-items: center;
+            transition: all .4s var(--ease);
+            margin-bottom: 12px;
+        }
+        .stack-card:hover .stack-icon {
+            background: rgba(255, 255, 255, .08);
+            transform: scale(1.05);
+        }
+        .stack-icon svg {
+            transition: transform .4s var(--ease);
+        }
+        .stack-card:hover .stack-icon svg {
+            transform: scale(1.1);
+        }
+        .stack-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 12px;
+        }
+        .stack-tools .stool {
+            border: 1px solid #333;
+            border-radius: 99px;
+            padding: 3px 8px;
+            font-size: 6px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #666;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all .3s var(--ease);
+        }
+        .stack-card:hover .stool {
+            border-color: #555;
+            color: #999;
+        }
+        .stack-tools .stool svg {
+            flex-shrink: 0;
+        }
+
+        /* ── process ── */
+        .process {
+            background: #f1efe9;
+            color: #111;
+        }
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-top: 1px solid #c7c2b9;
+            border-bottom: 1px solid #c7c2b9;
+        }
+        .step {
+            padding: 27px 18px 35px;
+            border-right: 1px solid #c7c2b9;
+            min-height: 230px;
+            transition: background .4s var(--ease);
+            border-radius: 4px;
+        }
+        .step:last-child {
+            border-right: 0;
+        }
+        .step:hover {
+            background: rgba(255, 255, 255, .4);
+        }
+        .step span {
+            font-size: 9px;
+            color: #967b68;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .step h3 {
+            font: 500 20px "Space Grotesk";
+            margin: 58px 0 9px;
+        }
+        .step p {
+            font-size: 10px;
+            line-height: 1.7;
+            color: #777;
+        }
+        .step-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 99px;
+            background: rgba(150, 123, 104, .1);
+            display: grid;
+            place-items: center;
+            transition: all .4s var(--ease);
+            flex-shrink: 0;
+        }
+        .step:hover .step-icon {
+            background: rgba(150, 123, 104, .2);
+            transform: scale(1.05);
+        }
+        .step-detail-icons {
+            display: flex;
+            gap: 6px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .step-detail-icons .sd-icon {
+            border: 1px solid rgba(0, 0, 0, .06);
+            border-radius: 99px;
+            padding: 3px 8px;
+            font-size: 6px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #888;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all .3s var(--ease);
+        }
+        .step:hover .sd-icon {
+            border-color: rgba(0, 0, 0, .12);
+            color: #555;
+        }
+        .step-detail-icons .sd-icon svg {
+            flex-shrink: 0;
+        }
+
+        /* ── contact ── */
+        .contact {
+            min-height: 88svh;
+            padding: clamp(90px, 10vw, 140px) 7vw 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(201, 29, 39, .04), transparent 50%);
+            pointer-events: none;
+        }
+        .contact h2 {
+            font: 600 clamp(60px, 10.5vw, 150px)/.79 "Space Grotesk";
+            letter-spacing: - .09em;
+            margin-top: 70px;
+            position: relative;
+        }
+        .contact h2 em {
+            font: 400 italic "DM Serif Display";
+            color: #999;
+        }
+        .contact-bottom {
+            border-top: 1px solid #292929;
+            padding-top: 27px;
+            display: flex;
+            justify-content: space-between;
+            gap: 25px;
+            position: relative;
+        }
+        .contact-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .contact-links a {
+            font-size: 9px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all .3s var(--ease);
+        }
+        .contact-links a:hover {
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .contact-links a svg {
+            flex-shrink: 0;
+            transition: transform .3s;
+        }
+        .contact-links a:hover svg {
+            transform: scale(1.2);
+        }
+        .contact-links button {
+            font-size: 9px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            background: none;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all .3s var(--ease);
+            font-family: inherit;
+        }
+        .contact-links button:hover {
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .contact-links button svg {
+            flex-shrink: 0;
+            transition: transform .3s;
+        }
+        .contact-links button:hover svg {
+            transform: scale(1.2);
+        }
+        .footer {
+            font-size: 8px;
+            color: #555;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+        .social-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .social-links a {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 99px;
+            border: 1px solid #333;
+            transition: all .3s var(--ease);
+            color: #888;
+        }
+        .social-links a:hover {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255, 255, 255, .04);
+            transform: translateY(-3px);
+        }
+        .social-links a svg {
+            transition: transform .3s;
+        }
+        .social-links a:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* ── back to top floating ── */
+        .back-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid #333;
+            color: #888;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            z-index: 70;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all .4s var(--ease);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .back-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .back-top:hover {
+            background: rgba(255, 255, 255, .1);
+            border-color: #666;
+            color: #fff;
+            transform: translateY(-4px);
+        }
+        .back-top svg {
+            transition: transform .4s var(--ease);
+        }
+        .back-top:hover svg {
+            transform: translateY(-3px);
+        }
+
+        /* ── toast ── */
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 14px 22px;
+            font-size: 10px;
+            color: #ddd;
+            letter-spacing: .06em;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(16px) scale(.96);
+            transition: all .4s var(--ease);
+            pointer-events: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .toast strong {
+            color: #fff;
+            display: block;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        /* ── reveal animations ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s var(--ease);
+        }
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger>* {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all .8s var(--ease);
+        }
+        .reveal-stagger.show>*:nth-child(1) {
+            transition-delay: .05s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.show>*:nth-child(2) {
+            transition-delay: .12s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.show>*:nth-child(3) {
+            transition-delay: .19s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.show>*:nth-child(4) {
+            transition-delay: .26s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.show>*:nth-child(5) {
+            transition-delay: .33s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.show>*:nth-child(6) {
+            transition-delay: .40s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── responsive ── */
+        @media(max-width:800px) {
+            .links {
+                display: none;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .nav {
+                height: 64px;
+                padding: 0 18px;
+            }
+            .hero {
+                padding: 0 18px 90px;
+                min-height: 760px;
+            }
+            .hero h1,
+            .hero h1 em {
+                font-size: clamp(64px, 18vw, 105px);
+            }
+            .hero-row,
+            .about-grid,
+            .interface-grid {
+                display: block;
+            }
+            .hero-copy {
+                margin-bottom: 24px;
+            }
+            .hero-meta {
+                right: 18px;
+                bottom: 24px;
+            }
+            .scroll-indicator {
+                left: 18px;
+            }
+            .hero-tech-badges {
+                display: none;
+            }
+            .section {
+                padding: 85px 18px;
+            }
+            .head {
+                display: block;
+                margin-bottom: 45px;
+            }
+            .note {
+                margin-top: 18px;
+            }
+            .capabilities,
+            .stack,
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .cap:nth-child(odd),
+            .cap:nth-child(even) {
+                border-right: 0;
+                padding: 25px 0;
+            }
+            .ui-body {
+                grid-template-columns: 105px 1fr;
+            }
+            .ui-main {
+                padding: 15px;
+            }
+            .ui-main h3 {
+                font-size: 23px;
+            }
+            .project {
+                grid-template-columns: 35px 1fr 35px;
+                gap: 10px;
+            }
+            .project p {
+                display: none;
+            }
+            .projects {
+                padding: 85px 18px;
+            }
+            .service {
+                grid-template-columns: 35px 1fr 32px;
+            }
+            .service p {
+                display: none;
+            }
+            .process-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .step:nth-child(2) {
+                border-right: 0;
+            }
+            .contact {
+                padding: 85px 18px 25px;
+            }
+            .contact-bottom {
+                display: block;
+            }
+            .footer {
+                margin-top: 22px;
+            }
+            #mobileNav {
+                width: min(300px, 80vw);
+                padding: 70px 24px 30px;
+            }
+            #mobileNav a {
+                font-size: 18px;
+                padding: 12px 0;
+            }
+            .social-links {
+                margin-top: 16px;
+            }
+            .back-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+            .toast {
+                bottom: 74px;
+                right: 20px;
+                padding: 12px 18px;
+                font-size: 9px;
+            }
+            .project-stack {
+                display: none;
+            }
+        }
+        @media(max-width:520px) {
+            .ui-side {
+                display: none;
+            }
+            .ui-body {
+                grid-template-columns: 1fr;
+            }
+            .ui-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            .ui-card:last-child {
+                display: none;
+            }
+            .interest-icons .int {
+                font-size: 6px;
+                padding: 4px 8px 4px 6px;
+            }
+            .project-stack {
+                display: none;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+            .chart svg path {
+                stroke-dashoffset: 0;
+            }
+            .hero-tech-badges .badge {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* ── cursor ring ── */
+        .cursor-ring {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid rgba(255, 255, 255, .10);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width .3s var(--ease), height .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+            will-change: transform;
+            display: none;
+        }
+        .cursor-ring.hover {
+            width: 48px;
+            height: 48px;
+            border-color: var(--accent);
+            background: rgba(201, 29, 39, .06);
+        }
+        @media (pointer: coarse) {
+            .cursor-ring {
+                display: none !important;
+            }
+        }
+    </style>
+
+    <style id="stability-polish">
+        /* ── stability & responsive polish ── */
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            min-width: 0;
+        }
+        main,
+        section,
+        header,
+        footer,
+        div {
+            min-width: 0;
+        }
+        img,
+        svg,
+        video,
+        canvas {
+            max-width: 100%;
+        }
+
+        .section {
+            padding-block: clamp(72px, 8vw, 118px);
+        }
+        .interface {
+            padding-block: clamp(72px, 8vw, 118px);
+        }
+        .projects {
+            padding-block: clamp(72px, 8vw, 118px);
+        }
+        .services {
+            padding-block: clamp(72px, 8vw, 118px);
+        }
+        .contact {
+            min-height: 72svh;
+            padding-block: clamp(72px, 8vw, 108px) 28px;
+        }
+        .head {
+            margin-bottom: clamp(34px, 4vw, 52px);
+        }
+
+        .hero {
+            min-height: 100svh;
+            padding-bottom: clamp(70px, 8vh, 100px);
+        }
+        .hero-row {
+            align-items: flex-end;
+        }
+        .hero-meta {
+            z-index: 3;
+            pointer-events: none;
+        }
+        .actions {
+            position: relative;
+            z-index: 4;
+        }
+
+        .interface-grid {
+            gap: clamp(32px, 5vw, 70px);
+        }
+        .ui {
+            width: 100%;
+            min-width: 0;
+        }
+        .ui-body,
+        .ui-main,
+        .ui-cards {
+            min-width: 0;
+        }
+        .ui-cards {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .ui-card {
+            min-width: 0;
+        }
+        .ui-card b,
+        .ui-main h3 {
+            overflow-wrap: anywhere;
+        }
+
+        .btn,
+        .pill,
+        .arrow-btn,
+        .menu-btn {
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 900px) {
+            .nav {
+                height: 64px;
+                padding-inline: 18px;
+            }
+            .links {
+                display: none;
+            }
+            .menu-btn {
+                display: block;
+            }
+
+            .hero {
+                min-height: calc(100svh - 64px);
+                margin-top: 64px;
+                padding: 76px 18px 54px;
+                align-items: center;
+            }
+            .hero-in {
+                width: 100%;
+                max-width: 760px;
+            }
+            .hero h1,
+            .hero h1 em {
+                font-size: clamp(58px, 15vw, 92px);
+                line-height: .86;
+            }
+            .kicker {
+                margin-bottom: 20px;
+            }
+            .hero-row {
+                display: block;
+                margin-top: 28px;
+            }
+            .hero-copy {
+                max-width: 620px;
+                font-size: 12px;
+                line-height: 1.7;
+                margin-bottom: 22px;
+            }
+            .actions {
+                display: flex;
+                gap: 8px;
+            }
+            .btn {
+                min-height: 44px;
+                padding: 12px 17px;
+                font-size: 10px;
+            }
+            .hero-meta {
+                right: 18px;
+                bottom: 18px;
+                font-size: 7px;
+            }
+            .scroll-indicator {
+                display: none;
+            }
+            .hero-tech-badges {
+                display: none;
+            }
+
+            .section,
+            .interface,
+            .projects,
+            .services {
+                padding: 64px 18px;
+            }
+            .head {
+                margin-bottom: 34px;
+            }
+            .title {
+                font-size: clamp(44px, 10vw, 70px);
+            }
+            .note {
+                max-width: 620px;
+                margin-top: 16px;
+                font-size: 11px;
+                line-height: 1.7;
+            }
+
+            .about-grid,
+            .interface-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 34px;
+                align-items: start;
+            }
+            .lead {
+                font-size: clamp(30px, 7vw, 52px);
+            }
+            .side {
+                padding-left: 18px;
+            }
+
+            .capabilities,
+            .stack {
+                grid-template-columns: 1fr 1fr;
+            }
+            .cap {
+                padding: 24px 18px 28px 0;
+            }
+            .cap:nth-child(odd) {
+                padding-right: 22px;
+            }
+            .cap:nth-child(even) {
+                padding-left: 22px;
+            }
+
+            .interface-copy h2 {
+                font-size: clamp(44px, 10vw, 72px);
+            }
+            .ui {
+                border-radius: 14px;
+                padding: 9px;
+            }
+            .ui-body {
+                grid-template-columns: 118px minmax(0, 1fr);
+                min-height: 330px;
+            }
+            .ui-main {
+                padding: 16px;
+            }
+            .ui-main h3 {
+                font-size: 24px;
+                margin: 7px 0 17px;
+            }
+            .ui-card {
+                padding: 10px;
+                min-height: 74px;
+            }
+            .ui-card b {
+                font-size: 16px;
+                margin-top: 9px;
+            }
+            .chart {
+                height: 110px;
+            }
+
+            .project {
+                grid-template-columns: 42px minmax(0, 1fr) 34px;
+                gap: 12px;
+                padding: 24px 4px;
+            }
+            .project h3 {
+                font-size: clamp(19px, 4vw, 30px);
+            }
+            .project p {
+                display: block;
+                font-size: 10px;
+                margin-top: 5px;
+            }
+            .project-stack {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-top: 6px;
+            }
+            .project-stack .mini-tag {
+                font-size: 6px;
+                padding: 2px 6px;
+            }
+
+            .service {
+                grid-template-columns: 42px minmax(0, 1fr) 34px;
+                gap: 12px;
+                padding: 22px 4px;
+            }
+            .service h3 {
+                font-size: 19px;
+            }
+            .service p {
+                display: block;
+                font-size: 10px;
+            }
+
+            .stack-card {
+                min-height: 180px;
+                padding: 22px;
+            }
+            .stack-card h3 {
+                font-size: 22px;
+                margin: 34px 0 9px;
+            }
+            .stack-tools {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-top: 10px;
+            }
+            .stack-tools .stool {
+                font-size: 6px;
+                padding: 2px 6px;
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .step {
+                min-height: 190px;
+                padding: 22px 16px 28px;
+            }
+            .step h3 {
+                margin-top: 42px;
+                font-size: 18px;
+            }
+            .step-detail-icons {
+                display: none;
+            }
+
+            .contact {
+                min-height: 62svh;
+                padding: 64px 18px 24px;
+            }
+            .contact h2 {
+                margin-top: 28px;
+                font-size: clamp(52px, 13vw, 92px);
+                line-height: .84;
+            }
+            .contact-bottom {
+                margin-top: 70px;
+            }
+
+            .back-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+            .toast {
+                bottom: 74px;
+                right: 20px;
+                padding: 12px 18px;
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .brand {
+                font-size: 12px;
+                gap: 8px;
+            }
+            .brand-icon {
+                width: 26px;
+                height: 26px;
+            }
+            .hero {
+                padding-top: 64px;
+                padding-bottom: 62px;
+            }
+            .hero h1,
+            .hero h1 em {
+                font-size: clamp(54px, 17vw, 78px);
+            }
+            .hero-copy {
+                font-size: 11px;
+            }
+            .actions {
+                flex-wrap: wrap;
+            }
+            .btn {
+                min-height: 42px;
+            }
+            .hero-meta {
+                position: static;
+                margin-top: 24px;
+                text-align: left;
+            }
+
+            .ticker {
+                height: 52px;
+            }
+            .ticker-track {
+                gap: 22px;
+            }
+            .ticker span {
+                font-size: 9px;
+            }
+
+            .capabilities,
+            .stack,
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .cap:nth-child(odd),
+            .cap:nth-child(even) {
+                border-right: 0;
+                padding: 22px 0;
+            }
+            .cap {
+                grid-template-columns: 38px minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .ui-body {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+            .ui-side {
+                display: none;
+            }
+            .ui-main {
+                padding: 13px;
+            }
+            .ui-cards {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 7px;
+            }
+            .ui-card {
+                min-height: 68px;
+                padding: 9px;
+            }
+            .ui-card b {
+                font-size: 15px;
+            }
+            .chart {
+                height: 92px;
+                margin-top: 8px;
+            }
+
+            .project {
+                grid-template-columns: 30px minmax(0, 1fr) 32px;
+                gap: 9px;
+                padding: 21px 0;
+            }
+            .project p {
+                display: block;
+                line-height: 1.55;
+            }
+            .project-stack {
+                display: none;
+            }
+            .service {
+                grid-template-columns: 30px minmax(0, 1fr) 32px;
+                gap: 9px;
+            }
+            .service p {
+                display: block;
+                line-height: 1.55;
+            }
+
+            .stack-card {
+                min-height: 0;
+                padding: 20px;
+            }
+            .stack-card h3 {
+                margin-top: 30px;
+                font-size: 21px;
+            }
+            .stack-tools {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-top: 8px;
+            }
+            .stack-tools .stool {
+                font-size: 5px;
+                padding: 2px 5px;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .step {
+                min-height: 0;
+                padding: 21px 0 24px;
+                border-right: 0;
+                border-bottom: 1px solid #c7c2b9;
+            }
+            .step:last-child {
+                border-bottom: 0;
+            }
+            .step h3 {
+                margin-top: 28px;
+            }
+            .step-detail-icons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-top: 12px;
+            }
+            .step-detail-icons .sd-icon {
+                font-size: 5px;
+                padding: 2px 6px;
+            }
+
+            .contact {
+                min-height: 58svh;
+            }
+            .contact h2 {
+                margin-top: 24px;
+                font-size: clamp(50px, 15vw, 76px);
+            }
+            .contact h2 em {
+                display: block;
+            }
+            .contact-bottom {
+                margin-top: 56px;
+                padding-top: 20px;
+            }
+            .contact-links {
+                gap: 15px;
+            }
+            .social-links {
+                margin-top: 16px;
+                gap: 12px;
+            }
+            .social-links a {
+                width: 28px;
+                height: 28px;
+            }
+            .back-top {
+                bottom: 16px;
+                right: 16px;
+                width: 36px;
+                height: 36px;
+            }
+            .back-top svg {
+                width: 16px;
+                height: 16px;
+            }
+            .toast {
+                bottom: 66px;
+                right: 16px;
+                padding: 10px 16px;
+                font-size: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero .orb,
+            .hero .orb2,
+            .ticker-track {
+                animation: none;
+            }
+            .hero-tech-badges .badge {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-in">
+            <div class="loader-top"><b>MAYANK DROID / ONYX</b><span id="num">00</span></div>
+            <div class="loader-line"><i></i></div>
+            <div class="loader-bottom"><span>Portfolio</span><span>Loading system</span></div>
+        </div>
+    </div>
+    <div class="progress" id="progress"></div>
+
+    <!-- Custom cursor ring -->
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Back to top -->
+    <button class="back-top" id="backTop" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><strong>✓ Copied</strong>hello@mayankdroid.dev</div>
+
+    <!-- Nav -->
+    <header class="nav" id="nav">
+        <a class="brand" href="#home">
+            <svg class="brand-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="14" r="13" stroke="#777" stroke-width="1.2"/>
+                <path d="M8.5 19L10.5 9.5L14 14.5L17.5 9.5L19.5 19" stroke="#f5f3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="14" cy="14" r="4" stroke="#c91d27" stroke-width="1.2" opacity=".5"/>
+            </svg>
+            MAYANK DROID / ONYX
+        </a>
+        <nav class="links">
+            <a href="#about">About</a>
+            <a href="#capabilities">Capabilities</a>
+            <a href="#work">Work</a>
+            <a href="#services">Services</a>
+            <a href="#ecosystem">Ecosystem</a>
+            <a class="pill" href="#contact">Let's talk</a>
+        </nav>
+        <button class="menu-btn" id="menu" aria-label="Menu">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f5f3ee" stroke-width="1.8" stroke-linecap="round">
+                <line x1="4" y1="7" x2="20" y2="7"/>
+                <line x1="4" y1="12" x2="20" y2="12"/>
+                <line x1="4" y1="17" x2="20" y2="17"/>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Nav Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav id="mobileNav">
+        <button class="close-btn" id="closeMobileNav" aria-label="Close menu">✕</button>
+        <a href="#about">About</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a class="mobile-pill" href="#contact">Let's talk</a>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero" id="home">
+            <div class="orb"></div>
+            <div class="orb2"></div>
+            <div class="hero-in reveal">
+                <div class="kicker eyebrow">Android Systems • Minimal Web • Editorial Type • Community</div>
+                <h1>SYSTEMS.<br><em>FRAMES.</em><br>CODE.</h1>
+                <div class="hero-row">
+                    <p class="hero-copy">I am Mayank Droid (Onyx) — a hybrid creator bridging deep Android system modifications, minimalist web architecture, and brutalist editorial typography. I turn technical logic and visual restraint into functional systems.</p>
+                    <div class="actions">
+                        <a class="btn light" href="#work">
+                            Explore systems
+                            <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7"/>
+                                <polyline points="7 7 17 7 17 17"/>
+                            </svg>
+                        </a>
+                        <a class="btn outline" href="#contact">Start a project</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Tech Badges — 12 badges with logos -->
+            <div class="hero-tech-badges">
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a4c639" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    Android
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fcc624" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    Linux
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                        <line x1="14" y1="9" x2="20" y2="15"/>
+                        <line x1="20" y1="9" x2="14" y2="15"/>
+                    </svg>
+                    Terminal
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#61dafb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                    </svg>
+                    Web
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    AI
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="2"/>
+                        <line x1="8" y1="2" x2="8" y2="22"/>
+                        <line x1="16" y1="2" x2="16" y2="22"/>
+                    </svg>
+                    ADB
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e34f26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                    </svg>
+                    HTML
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#264de4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    CSS
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f7df1e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                        <circle cx="16" cy="12" r="2"/>
+                    </svg>
+                    JS
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3776ab" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                        <path d="M12 2v20"/>
+                    </svg>
+                    Python
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f05033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    Git
+                </div>
+                <div class="badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2496ed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                        <circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    Docker
+                </div>
+            </div>
+
+            <div class="hero-meta"><b>01 / 09</b>Independent Technologist & Designer<br>Kernel • Code • Layout</div>
+            <div class="scroll-indicator">
+                <svg width="14" height="18" viewBox="0 0 14 18" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round">
+                    <rect x="2.5" y="1.5" width="9" height="15" rx="4.5"/>
+                    <circle cx="7" cy="11" r="1.5" fill="#555"/>
+                </svg>
+                Scroll to explore
+            </div>
+        </section>
+
+        <!-- Ticker -->
+        <div class="ticker">
+            <div class="ticker-track">
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                        <path d="M14 7L18 11L14 15"/>
+                    </svg>
+                    Fastboot
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Compile
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    Refine
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                    </svg>
+                    Deploy
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    Repeat
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <!-- duplicate for seamless loop -->
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                        <path d="M14 7L18 11L14 15"/>
+                    </svg>
+                    Fastboot
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Compile
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    Refine
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                    </svg>
+                    Deploy
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+                <span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    Repeat
+                </span>
+                <svg class="tick-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c91d27" stroke-width="2.5" stroke-linecap="round">
+                    <polygon points="12 2 15 9 22 9 16.5 14 18.5 21 12 16.5 5.5 21 7.5 14 2 9 9 9 12 2"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- About -->
+        <section class="section paper" id="about">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">02 / About</div>
+                    <h2 class="title">Raw logic with<br><em>an editorial eye.</em></h2>
+                </div>
+                <p class="note">No corporate buzzwords. No decorative filler. This index documents the exact domains I engineer, optimize, and publish.</p>
+            </div>
+            <div class="about-grid reveal">
+                <div>
+                    <div class="lead">I operate at the intersection of <span>AOSP customization, custom kernel governors, zero-bloat web interfaces, and Swiss typographic design.</span></div>
+                    <div class="interest-icons">
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            Android Open Source
+                        </span>
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"/>
+                                <line x1="12" y1="19" x2="20" y2="19"/>
+                            </svg>
+                            Linux / CLI
+                        </span>
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6"/>
+                                <polyline points="8 6 2 12 8 18"/>
+                            </svg>
+                            Minimalist Web
+                        </span>
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <line x1="9" y1="3" x2="9" y2="21"/>
+                                <line x1="15" y1="3" x2="15" y2="21"/>
+                            </svg>
+                            Swiss Typography
+                        </span>
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            Telegram Ecosystem
+                        </span>
+                        <span class="int">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12" y2="16"/>
+                            </svg>
+                            Device Optimization
+                        </span>
+                    </div>
+                </div>
+                <div class="side"><strong>My approach</strong>Deconstruct systems down to their raw mechanisms — whether tuning thermal limits on a custom ROM or engineering high-contrast, type-driven web layouts that load instantly.<br><br><strong>Analyze • Optimize • Build.</strong></div>
+            </div>
+        </section>
+
+        <!-- Capabilities -->
+        <section class="section" id="capabilities">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">03 / Capabilities</div>
+                    <h2 class="title">Operational<br><em>toolkit.</em></h2>
+                </div>
+                <p class="note">A disciplined set of technical and creative proficiencies spanning low-level mobile architecture to precision front-end design.</p>
+            </div>
+            <div class="capabilities reveal-stagger">
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"/>
+                            <line x1="12" y1="18" x2="12" y2="18"/>
+                            <circle cx="12" cy="12" r="2" stroke="#a4c639" stroke-width="1.2"/>
+                        </svg>
+                        01
+                    </span>
+                    <div>
+                        <h3>Android Modification &amp; Low-Level Tweaks</h3>
+                        <p>Bootloader unlock protocols, custom recovery deployment (TWRP/OrangeFox), custom ROM flashing, and partition debugging.</p>
+                        <div class="tags">
+                            <span class="tag">Fastboot</span>
+                            <span class="tag">TWRP</span>
+                            <span class="tag">Custom ROMs</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                            <circle cx="16" cy="9" r="1.5" stroke="#fcc624" stroke-width="1.5"/>
+                        </svg>
+                        02
+                    </span>
+                    <div>
+                        <h3>Root Environments &amp; Kernel Governance</h3>
+                        <p>Systemless root integration via Magisk, KernelSU, and APatch. Performance tuning, thermal mitigation, and module architecture.</p>
+                        <div class="tags">
+                            <span class="tag">KernelSU</span>
+                            <span class="tag">Magisk</span>
+                            <span class="tag">APatch</span>
+                            <span class="tag">Sysfs</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                            <path d="M14 7L18 11L14 15" stroke="#58a6ff" stroke-width="1.5"/>
+                        </svg>
+                        03
+                    </span>
+                    <div>
+                        <h3>Editorial &amp; Typographic Identity</h3>
+                        <p>High-contrast Swiss-style design, negative space studies, editorial poster layouts, and modular typographic systems.</p>
+                        <div class="tags">
+                            <span class="tag">Space Grotesk</span>
+                            <span class="tag">Vector Layouts</span>
+                            <span class="tag">Grid Systems</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                            <circle cx="12" cy="12" r="2" stroke="#00d4ff" stroke-width="1.2"/>
+                        </svg>
+                        04
+                    </span>
+                    <div>
+                        <h3>Minimalist Web Architecture</h3>
+                        <p>Zero-bloat, single-file web applications and responsive dark interfaces engineered with semantic HTML5, CSS Grid, and vanilla JS.</p>
+                        <div class="tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS Grid</span>
+                            <span class="tag">Vanilla JS</span>
+                            <span class="tag">Performance</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                            <circle cx="12" cy="12" r="2" stroke="#61dafb" stroke-width="1.2"/>
+                        </svg>
+                        05
+                    </span>
+                    <div>
+                        <h3>Community Infrastructure &amp; Distribution</h3>
+                        <p>Telegram channel architecture, asset hosting pipelines, automated setup distribution, and user support channels.</p>
+                        <div class="tags">
+                            <span class="tag">Telegram API</span>
+                            <span class="tag">OnyxHub</span>
+                            <span class="tag">Release Hubs</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="cap">
+                    <span class="cap-no">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                            <circle cx="17" cy="15" r="1.5" stroke="#f5a623" stroke-width="1.2"/>
+                        </svg>
+                        06
+                    </span>
+                    <div>
+                        <h3>Technical Documentation &amp; Video Systems</h3>
+                        <p>Deconstructing advanced technical subjects into precise guides, visual workflow breakdowns, and production-ready references.</p>
+                        <div class="tags">
+                            <span class="tag">Markdown</span>
+                            <span class="tag">Walkthroughs</span>
+                            <span class="tag">System Specs</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Interface -->
+        <section class="interface" id="interface">
+            <div class="interface-grid">
+                <div class="interface-copy reveal">
+                    <span class="eyebrow">04 / Interface study</span>
+                    <h2>Interfaces stripped<br><em>to raw data.</em></h2>
+                    <p>A high-density information display inspired by terminal prompts, hardware monitoring, and bootloader environments. Clean, responsive, and distraction-free.</p>
+                </div>
+                <div class="ui reveal">
+                    <div class="ui-top">
+                        <div class="dots"><i></i><i></i><i></i></div>
+                        <b>ONYX / KERNEL-V4</b>
+                        <span class="eyebrow">ONLINE</span>
+                    </div>
+                    <div class="ui-body">
+                        <aside class="ui-side">
+                            <small>Workspace</small>
+                            <div class="ui-nav">
+                                <span class="active">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                    Overview
+                                </span>
+                                <span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="2" x2="8" y2="22"/><line x1="16" y1="2" x2="16" y2="22"/></svg>
+                                    Devices
+                                </span>
+                                <span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    Projects
+                                </span>
+                                <span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/><path d="M12 6v6l4 2"/></svg>
+                                    Automation
+                                </span>
+                                <span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                    Settings
+                                </span>
+                            </div>
+                        </aside>
+                        <div class="ui-main">
+                            <small>MONITORING</small>
+                            <h3>System health</h3>
+                            <div class="ui-cards">
+                                <div class="ui-card"><span>Monitored Nodes</span><b>04</b></div>
+                                <div class="ui-card"><span>Active Devices</span><b>12</b></div>
+                                <div class="ui-card"><span>Optimized Deployments</span><b>28</b></div>
+                            </div>
+                            <div class="chart">
+                                <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+                                    <path d="M0 145 C70 125 80 150 135 110 S210 135 260 85 S350 100 390 70 S470 80 520 38 S570 52 600 18" fill="none" stroke="#d8d4cc" stroke-width="3"/>
+                                    <circle cx="520" cy="38" r="4" fill="#c91d27" opacity=".6"/>
+                                    <circle cx="390" cy="70" r="4" fill="#c91d27" opacity=".6"/>
+                                    <circle cx="260" cy="85" r="4" fill="#c91d27" opacity=".6"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="projects" id="work">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">05 / Selected work</div>
+                    <h2 class="title">Things I<br><em>build & explore.</em></h2>
+                </div>
+                <p class="note">Concepts and practical workstreams rather than invented case studies.</p>
+            </div>
+            <div class="project-list reveal-stagger">
+                <article class="project">
+                    <span class="project-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        01
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="project-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a4c639" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>Android Customization Lab</h3>
+                    </div>
+                    <div>
+                        <p>ROM, recovery, root and system-level experiments documented as repeatable workflows. <br><a href="https://youtube.com/@mayankdroid" target="_blank" style="color:#c91d27;text-decoration:underline;">View on YouTube →</a></p>
+                        <div class="project-stack">
+                            <span class="mini-tag">ROM</span>
+                            <span class="mini-tag">Recovery</span>
+                            <span class="mini-tag">Root</span>
+                            <span class="mini-tag">ADB</span>
+                        </div>
+                    </div>
+                    <span class="arrow-btn" onclick="window.open('https://youtube.com/@mayankdroid','_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="project">
+                    <span class="project-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        02
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="project-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                        </div>
+                        <h3>Onyx Hub Ecosystem</h3>
+                    </div>
+                    <div>
+                        <p>Automated updates, root modules, setups, and resource pipelines on Telegram. <br><a href="https://t.me/OnyxHub7" target="_blank" style="color:#c91d27;text-decoration:underline;">Join Channel →</a></p>
+                        <div class="project-stack">
+                            <span class="mini-tag">Telegram</span>
+                            <span class="mini-tag">Bot</span>
+                            <span class="mini-tag">Automation</span>
+                            <span class="mini-tag">Community</span>
+                        </div>
+                    </div>
+                    <span class="arrow-btn" onclick="window.open('https://t.me/OnyxHub7','_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="project">
+                    <span class="project-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        03
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="project-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                        </div>
+                        <h3>Technical Video Systems</h3>
+                    </div>
+                    <div>
+                        <p>Visual-first explanations for Android, Linux, tools, commands, and low-level firmware. <br><a href="https://youtube.com/@onyxdroid89" target="_blank" style="color:#c91d27;text-decoration:underline;">Watch Channel →</a></p>
+                        <div class="project-stack">
+                            <span class="mini-tag">Video</span>
+                            <span class="mini-tag">Tutorials</span>
+                            <span class="mini-tag">Visuals</span>
+                        </div>
+                    </div>
+                    <span class="arrow-btn" onclick="window.open('https://youtube.com/@onyxdroid89','_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="project">
+                    <span class="project-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        04
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="project-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#61dafb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6"/>
+                                <polyline points="8 6 2 12 8 18"/>
+                            </svg>
+                        </div>
+                        <h3>Minimal Web Experiences</h3>
+                    </div>
+                    <div>
+                        <p>Responsive front-end builds with editorial typography, grid structures, and zero-bloat architecture. <br><a href="https://t.me/RoranoaxZORO" target="_blank" style="color:#c91d27;text-decoration:underline;">Direct Inquiries →</a></p>
+                        <div class="project-stack">
+                            <span class="mini-tag">HTML</span>
+                            <span class="mini-tag">CSS</span>
+                            <span class="mini-tag">JS</span>
+                            <span class="mini-tag">Grid</span>
+                        </div>
+                    </div>
+                    <span class="arrow-btn" onclick="window.open('https://t.me/RoranoaxZORO','_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="project">
+                    <span class="project-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        05
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="project-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fcc624" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"/>
+                                <line x1="12" y1="19" x2="20" y2="19"/>
+                            </svg>
+                        </div>
+                        <h3>Mayank Droid Releases</h3>
+                    </div>
+                    <div>
+                        <p>Direct release channel for Magisk modules, system scripts, APK mods, and setup configs. <br><a href="https://t.me/MayankDroid7" target="_blank" style="color:#c91d27;text-decoration:underline;">Access Channel →</a></p>
+                        <div class="project-stack">
+                            <span class="mini-tag">Magisk</span>
+                            <span class="mini-tag">Scripts</span>
+                            <span class="mini-tag">APK</span>
+                            <span class="mini-tag">Configs</span>
+                        </div>
+                    </div>
+                    <span class="arrow-btn" onclick="window.open('https://t.me/MayankDroid7','_blank')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section class="services" id="services">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">06 / Ways I Can Help</div>
+                    <h2 class="title">Targeted<br><em>services.</em></h2>
+                </div>
+                <p class="note">Direct execution capabilities tailored for developers, tech communities, and creators.</p>
+            </div>
+            <div class="service-list reveal-stagger">
+                <article class="service">
+                    <span class="service-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        01
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="service-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                            </svg>
+                        </div>
+                        <h3>Portfolio &amp; Technical Landing Pages</h3>
+                    </div>
+                    <p>Custom, high-speed single-page portfolios built without heavy frameworks. Semantic, accessible, and type-focused.</p>
+                    <span class="arrow-btn" onclick="alert('Service: Portfolio & Technical Landing Pages — let\'s talk.')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="service">
+                    <span class="service-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        02
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="service-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>Android Device Optimization &amp; Setup</h3>
+                    </div>
+                    <p>Direct technical guidance for bootloader unlocking, root solutions (KernelSU/Magisk), and custom recovery workflows.</p>
+                    <span class="arrow-btn" onclick="alert('Service: Android Device Optimization — let\'s talk.')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="service">
+                    <span class="service-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        03
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="service-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Brand &amp; Channel Visual Systems</h3>
+                    </div>
+                    <p>Typography-driven channel banners, vector graphic templates, and modular visual brand guidelines.</p>
+                    <span class="arrow-btn" onclick="alert('Service: Brand & Channel Visual Systems — let\'s talk.')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+                <article class="service">
+                    <span class="service-no">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
+                        04
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="service-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"/>
+                                <line x1="12" y1="19" x2="20" y2="19"/>
+                            </svg>
+                        </div>
+                        <h3>Community Architecture &amp; Resource Hubs</h3>
+                    </div>
+                    <p>Setup and structuring of Telegram channels, discussion groups, and asset distribution pipelines for tech projects.</p>
+                    <span class="arrow-btn" onclick="alert('Service: Community Architecture — let\'s talk.')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Toolkit -->
+        <section class="section" id="ecosystem">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">07 / Toolkit</div>
+                    <h2 class="title">Core working<br><em>stack.</em></h2>
+                </div>
+                <p class="note">Tools change. Technical discipline remains constant: isolate variables, optimize logic, strip excess.</p>
+            </div>
+            <div class="stack reveal-stagger">
+                <article class="stack-card">
+                    <div class="stack-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a4c639" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <small>Mobile Core</small>
+                    <h3>Android / Fastboot / ADB</h3>
+                    <p>Bootloader interfaces, system-level debugging, partition flashing, and custom recovery maintenance.</p>
+                    <div class="stack-tools">
+                        <span class="stool">Fastboot</span>
+                        <span class="stool">ADB</span>
+                        <span class="stool">Bootloader</span>
+                        <span class="stool">AOSP</span>
+                    </div>
+                </article>
+                <article class="stack-card">
+                    <div class="stack-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fcc624" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                        </svg>
+                    </div>
+                    <small>Root Architecture</small>
+                    <h3>KernelSU / Magisk / APatch</h3>
+                    <p>Kernel-space root implementation, GKI integration, module management, and systemless modifications.</p>
+                    <div class="stack-tools">
+                        <span class="stool">KernelSU</span>
+                        <span class="stool">GKI</span>
+                        <span class="stool">APatch</span>
+                        <span class="stool">Magisk</span>
+                    </div>
+                </article>
+                <article class="stack-card">
+                    <div class="stack-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#61dafb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <small>Web & Interface</small>
+                    <h3>HTML5 / CSS Grid / Modern JS</h3>
+                    <p>Lightweight web architecture, responsive layout mathematics, semantic markup, and native DOM manipulation.</p>
+                    <div class="stack-tools">
+                        <span class="stool">HTML5</span>
+                        <span class="stool">Modern CSS</span>
+                        <span class="stool">Vanilla JS</span>
+                        <span class="stool">SVG</span>
+                    </div>
+                </article>
+                <article class="stack-card">
+                    <div class="stack-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                    </div>
+                    <small>Community & Media</small>
+                    <h3>Telegram / YouTube / Git</h3>
+                    <p>Version-controlled technical assets, multi-channel distribution networks, and content production pipelines.</p>
+                    <div class="stack-tools">
+                        <span class="stool">Telegram</span>
+                        <span class="stool">YouTube</span>
+                        <span class="stool">Git</span>
+                        <span class="stool">Markdown</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Process -->
+        <section class="section process" id="process">
+            <div class="head reveal">
+                <div>
+                    <div class="eyebrow">08 / Process</div>
+                    <h2 class="title">Methodical<br><em>execution.</em></h2>
+                </div>
+                <p class="note">A four-stage pipeline built to eliminate friction and ensure stability.</p>
+            </div>
+            <div class="process-grid reveal-stagger">
+                <div class="step">
+                    <span>
+                        <span class="step-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </span>
+                        01 — Deconstruct
+                    </span>
+                    <h3>Isolate the objective</h3>
+                    <p>Analyze hardware constraints, interface objectives, or distribution bottlenecks before writing a line of code or design.</p>
+                    <div class="step-detail-icons">
+                        <span class="sd-icon">Audit</span>
+                        <span class="sd-icon">Architecture</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <span>
+                        <span class="step-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                <line x1="12" y1="17" x2="12" y2="17"/>
+                            </svg>
+                        </span>
+                        02 — Prototype
+                    </span>
+                    <h3>Build the framework</h3>
+                    <p>Assemble the bare technical skeleton or typographic grid. Verify responsiveness and low-level stability.</p>
+                    <div class="step-detail-icons">
+                        <span class="sd-icon">Benchmark</span>
+                        <span class="sd-icon">Testing</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <span>
+                        <span class="step-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </span>
+                        03 — Execute
+                    </span>
+                    <h3>Optimize and build</h3>
+                    <p>Implement clean code, governor configurations, or typographic hierarchy. Zero unnecessary assets.</p>
+                    <div class="step-detail-icons">
+                        <span class="sd-icon">Compile</span>
+                        <span class="sd-icon">Layout</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <span>
+                        <span class="step-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#967b68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                                <line x1="8" y1="18" x2="16" y2="18"/>
+                            </svg>
+                        </span>
+                        04 — Deploy
+                    </span>
+                    <h3>Package and document</h3>
+                    <p>Publish export-ready web files, verified flashable archives, or clean public documentation.</p>
+                    <div class="step-detail-icons">
+                        <span class="sd-icon">Release</span>
+                        <span class="sd-icon">Verification</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact" id="contact">
+            <div>
+                <div class="eyebrow">09 / Contact</div>
+                <h2 class="reveal">Have an idea?<br><em>Let's make it real.</em></h2>
+            </div>
+            <div class="contact-bottom">
+                <div style="display:flex;flex-direction:column;gap:18px;width:100%;">
+                    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;">
+                        <div class="contact-links">
+                            <a href="mailto:hello@mayankdroid.dev" id="emailLink">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <path d="M22 7L12 13 2 7"/>
+                                </svg>
+                                Email
+                            </a>
+                            <button id="copyEmailBtn" style="background:none;border:none;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.15em;border-bottom:1px solid #444;padding-bottom:5px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:all .3s var(--ease);font-family:inherit;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Copy
+                            </button>
+                            <a href="https://t.me/RoranoaxZORO" target="_blank" rel="noopener">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.574 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                Direct Chat
+                            </a>
+                            <a href="https://t.me/MayankDroid7" target="_blank" rel="noopener">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                    <polyline points="2 17 12 22 22 17"/>
+                                    <polyline points="2 12 12 17 22 12"/>
+                                </svg>
+                                Channel
+                            </a>
+                            <a href="https://t.me/OnyxHub7" target="_blank" rel="noopener">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21.5 4.5L2.5 10.5L8.5 14.5L12.5 21.5L21.5 4.5Z"/>
+                                    <path d="M8.5 14.5L12.5 10.5"/>
+                                </svg>
+                                Community Hub
+                            </a>
+                        </div>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/itsmayank.jpg/" target="_blank" rel="noopener" aria-label="Instagram">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                    <circle cx="12" cy="12" r="5"/>
+                                    <circle cx="17.5" cy="6.5" r="1.5"/>
+                                </svg>
+                            </a>
+                            <a href="https://youtube.com/@mayankdroid" target="_blank" rel="noopener" aria-label="YouTube Main">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+                                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>
+                                </svg>
+                            </a>
+                            <a href="https://youtube.com/@onyxdroid89" target="_blank" rel="noopener" aria-label="YouTube Secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+                                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>
+                                </svg>
+                            </a>
+                            <a href="#" aria-label="GitHub">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.446-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.376.203 2.393.1 2.646.64.698 1.026 1.591 1.026 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer">© <span id="year">2026</span> Mayank Droid — Systems • Frames • Code</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const $ = s => document.querySelector(s),
+            $$ = s => document.querySelectorAll(s);
+
+        // ── loader ──
+        let n = 0;
+        const loader = $("#loader"),
+            timer = setInterval(() => {
+                n = Math.min(100, n + 8);
+                $("#num").textContent = String(n).padStart(2, "0");
+                if (n === 100) {
+                    clearInterval(timer);
+                    setTimeout(() => loader.classList.add("hide"), 300);
+                }
+            }, 70);
+
+        // ── progress bar ──
+        addEventListener("scroll", () => {
+            const h = document.documentElement.scrollHeight - innerHeight;
+            $("#progress").style.width = (h ? scrollY / h * 100 : 0) + "%";
+            $("#nav").classList.toggle("scrolled", scrollY > 25);
+            // back to top button
+            const backTop = $("#backTop");
+            if (scrollY > 500) {
+                backTop.classList.add("visible");
+            } else {
+                backTop.classList.remove("visible");
+            }
+        }, { passive: true });
+
+        // ── back to top ──
+        $("#backTop").addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // ── copy email toast ──
+        const copyBtn = $("#copyEmailBtn");
+        const toast = $("#toast");
+        let toastTimer;
+
+        copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText("hello@mayankdroid.dev").then(() => {
+                toast.classList.add("show");
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+            }).catch(() => {
+                // fallback
+                const ta = document.createElement("textarea");
+                ta.value = "hello@mayankdroid.dev";
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                ta.remove();
+                toast.classList.add("show");
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+            });
+        });
+
+        // ── reveal animations ──
+        const io = new IntersectionObserver(es => es.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add("show");
+                if (e.target.classList.contains("reveal-stagger")) {
+                    e.target.classList.add("show");
+                }
+            }
+        }), { threshold: .12, rootMargin: "0px 0px -40px 0px" });
+
+        $$('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+        // ── mobile menu ──
+        const menuBtn = $("#menu");
+        const mobileNav = $("#mobileNav");
+        const overlay = $("#navOverlay");
+        const closeBtn = $("#closeMobileNav");
+
+        function openMenu() {
+            mobileNav.classList.add("open");
+            overlay.classList.add("open");
+            document.body.style.overflow = "hidden";
+            menuBtn.setAttribute("aria-expanded", "true");
+        }
+
+        function closeMenu() {
+            mobileNav.classList.remove("open");
+            overlay.classList.remove("open");
+            document.body.style.overflow = "";
+            menuBtn.setAttribute("aria-expanded", "false");
+        }
+
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.setAttribute("aria-controls", "mobileNav");
+        menuBtn.onclick = openMenu;
+        closeBtn.onclick = closeMenu;
+        overlay.onclick = closeMenu;
+
+        mobileNav.querySelectorAll("a").forEach(link => {
+            link.onclick = () => {
+                closeMenu();
+            };
+        });
+
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape") closeMenu();
+        });
+
+        // ── chart animation on scroll ──
+        const chartPath = document.querySelector('.chart svg path');
+        if (chartPath) {
+            const chartObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        chartPath.style.animation = 'drawChart 2s var(--ease) forwards';
+                    }
+                });
+            }, { threshold: .3 });
+            chartObserver.observe(chartPath.closest('.chart'));
+        }
+
+        // ── email link click handler (toast fallback) ──
+        $("#emailLink").addEventListener("click", (e) => {
+            toast.textContent = "📬 Opening mail…";
+            toast.classList.add("show");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+                toast.innerHTML = '<strong>✓ Copied</strong>hello@mayankdroid.dev';
+            }, 1500);
+        });
+
+        // ── dynamic year ──
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        // ── cursor ring ──
+        const ring = document.getElementById('cursorRing');
+        if (window.matchMedia('(pointer: fine)').matches) {
+            ring.style.display = 'block';
+            document.addEventListener('mousemove', (e) => {
+                ring.style.left = e.clientX + 'px';
+                ring.style.top = e.clientY + 'px';
+            });
+            const hoverTargets = document.querySelectorAll('a, button, .work-item, .cap-card, .btn, .nav-pill, .social-bar a, .contact-links a, .contact-links button');
+            hoverTargets.forEach(el => {
+                el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+                el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+            });
+            document.addEventListener('mouseleave', () => { ring.style.opacity = '0'; });
+            document.addEventListener('mouseenter', () => { ring.style.opacity = '1'; });
+        }
+    </script>
+</body>
+</html>
